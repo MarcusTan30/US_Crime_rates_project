@@ -88,25 +88,11 @@ def fix_data(data):
 
 ```python
 #Input file path here.
-mount_drive('/content/gdrive/MyDrive/Application material/Applications/MOM/Project')
+mount_drive('/content/gdrive/MyDrive/Confidential')
 ```
 
     Mounted at /content/gdrive
-    /content/gdrive/MyDrive/Application material/Applications/MOM/Project
-    
-
-
-
-
-    ['MOM Technical Assessment_Analyst_Sr Anaylst_OPPD (LRWD).docx',
-     'Access_data.zip',
-     'US_Arrest_Data.zip',
-     'Power BI report.pbix',
-     'US Arrest Data',
-     'Section_II_Q1_1.png',
-     'Sitedata.csv',
-     'cluster.png',
-     'LTA_choropleth.html']
+    /content/gdrive/MyDrive/Confidential
 
 
 
