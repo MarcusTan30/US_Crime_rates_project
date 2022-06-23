@@ -67,8 +67,6 @@ from colab_pdf import colab_pdf
 ```
 
 
-
-
 ```python
 def mount_drive(folder_path):
   drive.mount('/content/gdrive', force_remount = True)
@@ -115,151 +113,10 @@ mount_drive('/content/gdrive/MyDrive/Application material/Applications/MOM/Proje
 Section 1
 Question 1.1
 
-
-```python
-
-#Import data
-Access_data = zipfile.ZipFile('/content/gdrive/MyDrive/Application material/Applications/MOM/Project/Access_data.zip')
-Access_data=get_zip(Access_data)
-file_list=list()
-var_list=list()
-for file in Access_data:
-   name=str(file)
-   name=name.split("<zipfile.ZipExtFile name='")[1].split("' mode='r' compress_type=deflate>")[0]
-   name=name.replace("-","_")
-   if "csv" in name:
-      names=name.replace('.csv',"")
-      globals()[f"{names}"]=pd.read_csv(file) 
-      #if you want to add the file itself, add the word globals() in front of f"names"
-      file_list.append([f"{names}"])
-for file in file_list:
-#Ensure Site column of each dataframe indicates the site of the data
-  name=file[0]
-  name=name.split("Site")[1].split("2")[0]
-  globals()[f"{file[0]}"]['Site']=name
-  var_list.append(globals()[f"{file[0]}"])
-#append all dataframes
-Sitedata=pd.concat(var_list,ignore_index=True)
-#Card Number (If card no. starts with one or more "0", it will be removed, so we should reassign it)
-Sitedata['CardNum'].apply(lambda x: x if str(x)=='nan' else str(x).zfill(8))
-
-
-
-```
-
-
-
-
-    0        00001001
-    1        00001001
-    2        00001001
-    3        00001001
-    4        00001001
-               ...   
-    36686         NaN
-    36687         NaN
-    36688         NaN
-    36689         NaN
-    36690         NaN
-    Name: CardNum, Length: 36691, dtype: object
-
-
-
 Should we drop null data? This sub-section will study the distribution and amount of null data.
 From the heatmap, it seems that there are a significant portion of data errors originating from a misnaming of columns in one or more of the datasets. Under normal circumstances, i would go back to my code to rectify it, however for chronological flow of you the reader, i will change it from here on.
 After rectifying misnamed columns in datasets, it seems the errors with CardNum has disappeared however there seems to be some missing data with Dept.
 My guess is that a bulk of the missing data originates from Visitor and Temporary passes as these Passes do not have a department tagged to them
-
-
-```python
-#create heatmap to analyse missing data sources
-sns.heatmap(Sitedata.isna(),cbar=False).set_title("Missing values heatmap")
-
-
-```
-
-
-
-
-    Text(0.5, 1.0, 'Missing values heatmap')
-
-
-
-
-    
-![png](output_10_1.png)
-    
-
-
-
-```python
-#Rectify data error resulting from misnamed columns
-for data in var_list:
-  data=fix_data(data)
-Sitedata=pd.concat(var_list,ignore_index=True)
-Sitedata['CardNum']=Sitedata['CardNum'].apply(lambda x: x if str(x)=='nan' else str(x).zfill(8))
-Sitedata['CardNum']=Sitedata['CardNum'].astype(str)
-Sitedata['When'] =  pd.to_datetime(Sitedata['When'], format='%d/%m/%Y %H:%M')
-#A second look: create heatmap to analyse missing data sources
-sns.heatmap(Sitedata.isna(),cbar=False).set_title("Missing values heatmap")
-#still missing data in dept,check number of missing data in non-staff cards
-print(Sitedata.loc[Sitedata['Profile']==0].isna().sum())
-```
-
-    When       0
-    Profile    0
-    Dept       0
-    CardNum    0
-    Site       0
-    dtype: int64
-    
-
-
-    
-![png](output_11_1.png)
-    
-
-
-
-```python
-#it seems that all Dept column missing data originates from Card numbers without staff Profile(AKA, profile!=0).
-#thus, allocate all Dept rows with Tempt and Visitor status
-Sitedata
-#Check data errors in profile column
-Sitedata['Profile'].loc[Sitedata['Profile']=='Visitor Pass']='2'
-Sitedata['Profile'].loc[Sitedata['Profile']=='Temp Pass']='1'
-Sitedata['Profile'].loc[Sitedata['Profile']=='Staff Pass']='0'
-Sitedata['Profile'].loc[Sitedata['Profile']==2]='2'
-Sitedata['Profile'].loc[Sitedata['Profile']==1]='1'
-Sitedata['Profile'].loc[Sitedata['Profile']==0]='0'
-print(Sitedata['Profile'].unique())
-#Alter Dept data of Visitor and Temp
-Sitedata['Dept'].loc[Sitedata['Profile']=='2']='Visitor'
-Sitedata['Dept'].loc[Sitedata['Profile']=='1']='Temp'
-
-#Check missing data heatmap again (no missing data observed)
-sns.heatmap(Sitedata.isna(),cbar=False).set_title("Missing values heatmap")
-
-
-#export data
-Sitedata.to_csv('/content/gdrive/MyDrive/Application material/Applications/MOM/Project/Sitedata.csv',sep=',')
-```
-
-    /usr/local/lib/python3.7/dist-packages/pandas/core/indexing.py:1732: SettingWithCopyWarning: 
-    A value is trying to be set on a copy of a slice from a DataFrame
-    
-    See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-      self._setitem_single_block(indexer, value, name)
-    
-
-    ['2' '1' '0']
-    
-
-
-    
-![png](output_12_2.png)
-    
-
 
 Section 2 Question 2.1
 
@@ -327,7 +184,7 @@ sns.heatmap(USstatex77.isnull(),cbar=False).set_title("Missing values heatmap")
 
 
     
-![png](output_17_2.png)
+![png](output_12_2.png)
     
 
 
@@ -353,7 +210,7 @@ plot=sns.pairplot(USstate_std,palette='Set1')
 
 
     
-![png](output_19_0.png)
+![png](output_14_0.png)
     
 
 
@@ -377,7 +234,7 @@ plt.show()
 
 
     
-![png](output_21_0.png)
+![png](output_16_0.png)
     
 
 
@@ -399,7 +256,7 @@ plt.show()
 
 
     
-![png](output_23_0.png)
+![png](output_18_0.png)
     
 
 
@@ -445,7 +302,7 @@ plt.show()
 
 
     
-![png](output_24_0.png)
+![png](output_19_0.png)
     
 
 
@@ -643,7 +500,7 @@ print('The statistically significant predictor variables of interest are:',Imp_V
 
 
     
-![png](output_35_1.png)
+![png](output_30_1.png)
     
 
 
