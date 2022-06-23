@@ -311,7 +311,7 @@ m.save("MOM.html")
 
 ```
 
-Section 2 Question 2.2
+
 
 Part I:Data preparation and  manipulation
 Note: As n is small (n=50) it was decided that splitting the data into train and test sets might result in inaccurate measurements of the predictability of the model as the test set would be too small.Thus, no train-test split was done.
