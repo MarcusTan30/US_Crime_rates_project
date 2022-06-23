@@ -97,8 +97,6 @@ mount_drive('/content/gdrive/MyDrive/Confidential')
     /content/gdrive/MyDrive/Confidential
 
 
-Section 2 Question 2.1
-
 Data import and manipulation
 
 
