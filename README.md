@@ -95,15 +95,6 @@ mount_drive('/content/gdrive/MyDrive/Confidential')
     /content/gdrive/MyDrive/Confidential
 
 
-
-Section 1
-Question 1.1
-
-Should we drop null data? This sub-section will study the distribution and amount of null data.
-From the heatmap, it seems that there are a significant portion of data errors originating from a misnaming of columns in one or more of the datasets. Under normal circumstances, i would go back to my code to rectify it, however for chronological flow of you the reader, i will change it from here on.
-After rectifying misnamed columns in datasets, it seems the errors with CardNum has disappeared however there seems to be some missing data with Dept.
-My guess is that a bulk of the missing data originates from Visitor and Temporary passes as these Passes do not have a department tagged to them
-
 Section 2 Question 2.1
 
 Data import and manipulation
